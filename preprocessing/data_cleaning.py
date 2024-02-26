@@ -6,15 +6,16 @@ from openpyxl import load_workbook
 def find_unique_values():
     """Find unique values for each column."""
     wb = load_workbook('./Data_sheet.xlsx')
-    col_names = ['Line', 'Passage', 'Origin', 'Type', 'Genotype', 'Reprogramming method', 'Age',
-                 'Gender', 'Info', 'Media/ECM', 'Date', 'Initials', 'Notes', 'Cell number',
-                 'Confluency']
+    col_names = ['Line', 'Passage', 'Origin', 'Type', 'Subtype', 'Pools', 'CRISPR EDIT', 'Genotype',
+                 'Reprogramming method', 'Age', 'Gender', 'Info', 'Media', 'ECM', 'Date',
+                 'Initials', 'Notes', 'Cell number', 'Confluency']
     unique_values = [set() for _ in range(len(col_names))]
     for sheet_name in wb.sheetnames[:-2]:
         sheet = wb[sheet_name]
         for row in sheet.iter_rows(min_row=2,
+                                   max_row=2000,
                                    min_col=2,
-                                   max_col=16,
+                                   max_col=len(col_names)+1,
                                    values_only=True):
             for (value_set, value, col_name) in zip(unique_values, row, col_names):
                 if value == "Barcode/":  # Makes sure the last sheet's last part is cut out
