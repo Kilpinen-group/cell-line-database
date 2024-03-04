@@ -1,0 +1,4 @@
+Line, Passage, Origin, Type, Subtype, Pools, CRISPR_EDIT, Genotype, Reprogramming_method, Age, Gender, Info, Media, ECM, Date, Initials, Notes, Cell number, Confluency
+oikd2, p13, HipSci, iPSC, , , , WT, , , , General stock, E8, VTN, 06.09.2021, FI, , , 40
+qeti1, p16, HipSci, iPSC, , , , Kabuki, , , , General stock, E8, VTN, 06.09.2021, FI, , , 45
+HEL317.1, p9, BSCC, iPSC, , , , , , , , , E8, VTN, 09.07.2023, AS, , , 
