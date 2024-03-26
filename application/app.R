@@ -21,12 +21,31 @@ sidebar <- dashboardSidebar(
   )
 )
 
-body <- dashboardBody()
+body <- dashboardBody(
+  tabItems(
+    tabItem(
+      tabName = "data",
+      fluidRow(
+        box(
+          width = 12,
+          style = "height: 400px; overflow-y: scroll;",
+          dataTableOutput("cell_lines_table_data")
+        )
+      )
+    )
+  )
+)
 
 # Wrap ui components together
 ui <- dashboardPage(header, sidebar, body)
 
 server <- function(input, output) {
+  
+  # View data page
+  output$cell_lines_table_data <- DT::renderDataTable({
+    DT::datatable(dummy_cell_lines, filter = "top")
+  })
+  
 }
 
 shinyApp(ui, server)
