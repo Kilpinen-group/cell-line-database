@@ -32,6 +32,36 @@ body <- dashboardBody(
           dataTableOutput("cell_lines_table_data")
         )
       )
+    ),
+    tabItem(
+      tabName = "tanks",
+      fluidRow(
+        column(
+          width = 6,
+          box(
+            width = NULL,
+            selectInput("select_tank", "Select Tank:", choices = c("All", unique(dummy_cell_lines$Tank)))
+          )
+        ),
+        column(
+          width = 6,
+          box(
+            width = NULL,
+            uiOutput("select_column")
+          )
+        )
+      ),
+      fluidRow(
+        column(
+          width = 12,
+          box(
+            title = "Visualization",
+            width = NULL,
+            style = "overflow-x: auto;",
+            plotOutput("chart")
+          )
+        )
+      )
     )
   )
 )
@@ -44,6 +74,28 @@ server <- function(input, output) {
   # View data page
   output$cell_lines_table_data <- DT::renderDataTable({
     DT::datatable(dummy_cell_lines, filter = "top")
+  })
+  
+  # Explore tanks page
+  output$select_column <- renderUI({
+    selectInput("select_column", "Select Column:", choices = c("Line", "Passage", "Origin", "Type"))
+  })
+  
+  filtered_data <- reactive({
+    if (input$select_tank == "All") {
+      filtered_data <- dummy_cell_lines
+    } else {
+      filtered_data <- dummy_cell_lines[dummy_cell_lines$Tank == input$select_tank, ]
+    }
+    filtered_data
+  })
+  
+  output$chart <- renderPlot({
+    req(input$select_column)
+    ggplot(filtered_data(), aes_string(x = input$select_column)) +
+      geom_bar() +
+      labs(title = paste("Bar Chart of", input$select_column)) +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1))
   })
   
 }
