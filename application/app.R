@@ -62,6 +62,45 @@ body <- dashboardBody(
           )
         )
       )
+    ),
+    tabItem(
+      tabName = "lines",
+      fluidRow(
+        column(
+          width = 6,
+          box(
+            width = NULL,
+            selectInput("select_tank_lines", "Select Tank:", choices = c("All", unique(dummy_cell_lines$Tank)))
+          )
+        ),
+        column(
+          width = 6,
+          box(
+            width = NULL,
+            selectInput("select_line", "Select Line:", choices = unique(dummy_cell_lines$Line))
+          )
+        )
+      ),
+      fluidRow(
+        column(
+          width = 6,
+          box(
+            title = "Visualization",
+            width = NULL,
+            style = "overflow-x: auto;",
+            plotOutput("line_passages_plot")
+          )
+        ),
+        column(
+          width = 6,
+          box(
+            title = "Filtered Data",
+            width = NULL,
+            style = "max-height: 400px; overflow-y: auto;",
+            dataTableOutput("filtered_data_table")
+          )
+        )
+      )
     )
   )
 )
@@ -96,6 +135,31 @@ server <- function(input, output) {
       geom_bar() +
       labs(title = paste("Bar Chart of", input$select_column)) +
       theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  })
+  
+  # Explore lines page
+  output$line_passages_plot <- renderPlot({
+    req(input$select_line)
+    
+    if (input$select_tank == "All") {
+      filtered_data <- dummy_cell_lines[dummy_cell_lines$Line == input$select_line, ]
+    } else {
+      filtered_data <- dummy_cell_lines[dummy_cell_lines$Line == input$select_line & dummy_cell_lines$Tank == input$select_tank, ]
+    }
+    
+    ggplot(filtered_data, aes(x = Passage)) + geom_bar() + labs(title = paste("Passages for Line", input$select_line))
+  })
+  
+  output$filtered_data_table <- DT::renderDataTable({
+    req(input$select_line)
+    
+    if (input$select_tank == "All") {
+      filtered_data <- dummy_cell_lines[dummy_cell_lines$Line == input$select_line, ]
+    } else {
+      filtered_data <- dummy_cell_lines[dummy_cell_lines$Line == input$select_line & dummy_cell_lines$Tank == input$select_tank, ]
+    }
+    
+    DT::datatable(filtered_data)
   })
   
 }
