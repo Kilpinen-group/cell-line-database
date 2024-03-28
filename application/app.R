@@ -297,6 +297,15 @@ server <- function(input, output) {
     filtered_data
   })
   
+  filtered_data_lines <- reactive({
+    if (input$select_tank_lines == "All") {
+      filtered_data_lines <- dummy_cell_lines[dummy_cell_lines$Line == input$select_line, ]
+    } else {
+      filtered_data_lines <- dummy_cell_lines[dummy_cell_lines$Line == input$select_line & dummy_cell_lines$Tank == input$select_tank_lines, ]
+    }
+    filtered_data_lines
+  })
+  
   output$chart <- renderPlot({
     req(input$select_column)
     ggplot(filtered_data(), aes_string(x = input$select_column)) +
@@ -308,26 +317,12 @@ server <- function(input, output) {
   # Explore lines page
   output$line_passages_plot <- renderPlot({
     req(input$select_line)
-    
-    if (input$select_tank == "All") {
-      filtered_data <- dummy_cell_lines[dummy_cell_lines$Line == input$select_line, ]
-    } else {
-      filtered_data <- dummy_cell_lines[dummy_cell_lines$Line == input$select_line & dummy_cell_lines$Tank == input$select_tank, ]
-    }
-    
-    ggplot(filtered_data, aes(x = Passage)) + geom_bar() + labs(title = paste("Passages for Line", input$select_line))
+    ggplot(filtered_data_lines(), aes(x = Passage)) + geom_bar() + labs(title = paste("Passages for Line", input$select_line))
   })
   
   output$filtered_data_table <- DT::renderDataTable({
     req(input$select_line)
-    
-    if (input$select_tank == "All") {
-      filtered_data <- dummy_cell_lines[dummy_cell_lines$Line == input$select_line, ]
-    } else {
-      filtered_data <- dummy_cell_lines[dummy_cell_lines$Line == input$select_line & dummy_cell_lines$Tank == input$select_tank, ]
-    }
-    
-    DT::datatable(filtered_data)
+    DT::datatable(filtered_data_lines())
   })
   
 }
