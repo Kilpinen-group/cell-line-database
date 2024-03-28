@@ -128,11 +128,11 @@ body <- dashboardBody(
             ),
             box(
               width = NULL,
-              selectInput("select_reprogramming_method_add", "Reprogramming method:", choices = c("None", unique(dummy_cell_lines$"Reprogramming.method")))
+              selectInput("select_reprogramming_method_add", "Reprogramming method:", choices = c("", unique(dummy_cell_lines$"Reprogramming.method")))
             ),
             box(
               width = NULL,
-              selectInput("select_media_add", "Media:", choices = c("NA", unique(dummy_cell_lines$Media)))
+              selectInput("select_media_add", "Media:", choices = c("", unique(dummy_cell_lines$Media)))
             ),
           ),
           column(
@@ -155,7 +155,7 @@ body <- dashboardBody(
             ),
             box(
               width = NULL,
-              selectInput("select_pools_add", "Pools:", choices = c(unique(dummy_cell_lines$Pools)))
+              selectInput("select_pools_add", "Pools:", choices = c("", unique(dummy_cell_lines$Pools)))
             ),
             box(
               width = NULL,
@@ -171,7 +171,7 @@ body <- dashboardBody(
             ),
             box(
               width = NULL,
-              selectInput("select_ecm_add", "ECM:", choices = c("NA", unique(dummy_cell_lines$ECM)))
+              selectInput("select_ecm_add", "ECM:", choices = c("", unique(dummy_cell_lines$ECM)))
             ),
           ),
           column(
@@ -194,18 +194,18 @@ body <- dashboardBody(
             ),
             box(
               width = NULL,
-              selectInput("select_crispr_edit_add", "CRISPR EDIT:", choices = c(unique(dummy_cell_lines$"CRISPR.EDIT")))
+              selectInput("select_crispr_edit_add", "CRISPR EDIT:", choices = c("", unique(dummy_cell_lines$"CRISPR.EDIT")))
             ),
             box(
               width = NULL,
-              selectInput("select_gender_add", "Gender:", choices = c("NA", unique(dummy_cell_lines$Gender)))
+              selectInput("select_gender_add", "Gender:", choices = c("", unique(dummy_cell_lines$Gender)))
             ),
             box(
               width = NULL,
               dateInput(
                 "select_date_add",
                 "Date:",
-                format = "dd/mm/yyyy",
+                format = "dd.mm.yyyy",
               )
             ),
             
@@ -226,11 +226,11 @@ body <- dashboardBody(
             ),
             box(
               width = NULL,
-              selectInput("select_info_add", "Info:", choices = c("NA", unique(dummy_cell_lines$Info)))
+              selectInput("select_info_add", "Info:", choices = c("", unique(dummy_cell_lines$Info)))
             ),
             box(
               width = NULL,
-              selectInput("select_cell_number_add", "Cell number:", choices = c("NA", unique(dummy_cell_lines$"Cell-number")))
+              selectInput("select_cell_number_add", "Cell number:", choices = c("", unique(dummy_cell_lines$"Cell-number")))
             ),
             
           )
@@ -278,9 +278,11 @@ ui <- dashboardPage(header, sidebar, body)
 
 server <- function(input, output) {
   
+  df <- reactiveValues(data = dummy_cell_lines)
+  
   # View data page
   output$cell_lines_table_data <- DT::renderDataTable({
-    DT::datatable(dummy_cell_lines, filter = "top")
+    DT::datatable(df$data, filter = "top")
   })
   
   # Explore tanks page
@@ -290,18 +292,18 @@ server <- function(input, output) {
   
   filtered_data <- reactive({
     if (input$select_tank == "All") {
-      filtered_data <- dummy_cell_lines
+      filtered_data <- df$data
     } else {
-      filtered_data <- dummy_cell_lines[dummy_cell_lines$Tank == input$select_tank, ]
+      filtered_data <- df$data[df$data$Tank == input$select_tank, ]
     }
     filtered_data
   })
   
   filtered_data_lines <- reactive({
     if (input$select_tank_lines == "All") {
-      filtered_data_lines <- dummy_cell_lines
+      filtered_data_lines <- df$data
     } else {
-      filtered_data_lines <- dummy_cell_lines[dummy_cell_lines$Tank == input$select_tank_lines, ]
+      filtered_data_lines <- df$data[df$data$Tank == input$select_tank_lines, ]
     }
     filtered_data_lines
   })
@@ -334,6 +336,25 @@ server <- function(input, output) {
     current_filtered_data_lines <- filtered_data_lines()
     current_filtered_data_lines <- current_filtered_data_lines[current_filtered_data_lines$Line == input$select_line, ]
     DT::datatable(current_filtered_data_lines)
+  })
+  
+  # Adding lines
+  observeEvent(input$add_btn, {
+    new_date <- format(input$select_date_add, "%d.%m.%Y")
+    new_row <- c(input$select_tank_add, input$select_rack_stick_add, 
+                 input$select_box_add, input$select_location_add, 
+                 input$select_line_add,input$select_passage_add,
+                 input$select_origin_add, input$select_type_add,
+                 input$select_subtype_add, input$select_pools_add,
+                 input$select_crispr_edit_add, input$select_genotype_add,
+                 input$select_reprogramming_method_add, 
+                 input$select_age_add, input$select_gender_add,
+                 input$select_info_add, input$select_media_add,
+                 input$select_ecm_add, new_date,
+                 "JH", input$select_notes_add,
+                 input$select_cell_number_add, 
+                 input$select_confluency_add)
+    df$data <- rbind(df$data, new_row)
   })
   
 }
