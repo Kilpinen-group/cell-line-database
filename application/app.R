@@ -81,7 +81,7 @@ body <- dashboardBody(
           width = 6,
           box(
             width = NULL,
-            selectInput("select_line", "Select Line:", choices = unique(dummy_cell_lines$Line))
+            uiOutput("select_line")
           )
         )
       ),
@@ -299,12 +299,13 @@ server <- function(input, output) {
   
   filtered_data_lines <- reactive({
     if (input$select_tank_lines == "All") {
-      filtered_data_lines <- dummy_cell_lines[dummy_cell_lines$Line == input$select_line, ]
+      filtered_data_lines <- dummy_cell_lines
     } else {
-      filtered_data_lines <- dummy_cell_lines[dummy_cell_lines$Line == input$select_line & dummy_cell_lines$Tank == input$select_tank_lines, ]
+      filtered_data_lines <- dummy_cell_lines[dummy_cell_lines$Tank == input$select_tank_lines, ]
     }
     filtered_data_lines
   })
+  
   
   output$chart <- renderPlot({
     req(input$select_column)
@@ -315,14 +316,24 @@ server <- function(input, output) {
   })
   
   # Explore lines page
+  output$select_line <- renderUI({
+    selectInput("select_line", "Select Line:", choices = unique(filtered_data_lines()$Line))
+  })
+  
   output$line_passages_plot <- renderPlot({
     req(input$select_line)
-    ggplot(filtered_data_lines(), aes(x = Passage)) + geom_bar() + labs(title = paste("Passages for Line", input$select_line))
+
+    current_filtered_data_lines <- filtered_data_lines()
+    current_filtered_data_lines <- current_filtered_data_lines[current_filtered_data_lines$Line == input$select_line, ]
+    ggplot(current_filtered_data_lines, aes(x = Passage)) + geom_bar() + labs(title = paste("Passages for Line", input$select_line))
   })
   
   output$filtered_data_table <- DT::renderDataTable({
     req(input$select_line)
-    DT::datatable(filtered_data_lines())
+    
+    current_filtered_data_lines <- filtered_data_lines()
+    current_filtered_data_lines <- current_filtered_data_lines[current_filtered_data_lines$Line == input$select_line, ]
+    DT::datatable(current_filtered_data_lines)
   })
   
 }
