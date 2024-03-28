@@ -5,6 +5,13 @@ library(DT)
 
 dummy_cell_lines <- read.csv('data/dummy_data.csv')
 
+# Initialize unique values
+unique_values <- list()
+
+for(col in names(dummy_cell_lines)) {
+  unique_values[[col]] <- unique(dummy_cell_lines[[col]])
+}
+
 header <- dashboardHeader(title="Welcome!")
 
 sidebar <- dashboardSidebar(
@@ -127,11 +134,11 @@ ui <- dashboardPage(header, sidebar, body)
 
 server <- function(input, output) {
   
-  df <- reactiveValues(data = dummy_cell_lines)
+  values <- reactiveValues(df = dummy_cell_lines, unique = unique_values)
   
   # View data page
   output$cell_lines_table_data <- DT::renderDataTable({
-    DT::datatable(df$data, filter = "top")
+    DT::datatable(values$df, filter = "top")
   })
   
   # Explore tanks page
@@ -141,18 +148,18 @@ server <- function(input, output) {
   
   filtered_data <- reactive({
     if (input$select_tank == "All") {
-      filtered_data <- df$data
+      filtered_data <- values$df
     } else {
-      filtered_data <- df$data[df$data$Tank == input$select_tank, ]
+      filtered_data <- values$df[values$df$Tank == input$select_tank, ]
     }
     filtered_data
   })
   
   filtered_data_lines <- reactive({
     if (input$select_tank_lines == "All") {
-      filtered_data_lines <- df$data
+      filtered_data_lines <- values$df
     } else {
-      filtered_data_lines <- df$data[df$data$Tank == input$select_tank_lines, ]
+      filtered_data_lines <- values$df[values$df$Tank == input$select_tank_lines, ]
     }
     filtered_data_lines
   })
@@ -203,7 +210,7 @@ server <- function(input, output) {
                  "JH", input$select_notes_add,
                  input$select_cell_number_add, 
                  input$select_confluency_add)
-    df$data <- rbind(df$data, new_row)
+    values$df <- rbind(values$df, new_row)
   })
 
   # This is done like so to reset the inputs after the row has been added
@@ -219,23 +226,23 @@ server <- function(input, output) {
               width = 3,
               box(
                 width = NULL,
-                selectInput("select_tank_add", "Tank:", choices = c(unique(dummy_cell_lines$Tank)))
+                selectInput("select_tank_add", "Tank:", choices = values$unique$Tank)
               ),
               box(
                 width = NULL,
-                selectInput("select_line_add", "Line:", choices = c(unique(dummy_cell_lines$Line)))
+                selectInput("select_line_add", "Line:", choices = values$unique$Line)
               ),
               box(
                 width = NULL,
-                selectInput("select_subtype_add", "Subtype:", choices = c(unique(dummy_cell_lines$Subtype)))
+                selectInput("select_subtype_add", "Subtype:", choices = values$unique$Subtype)
               ),
               box(
                 width = NULL,
-                selectInput("select_reprogramming_method_add", "Reprogramming method:", choices = c("", unique(dummy_cell_lines$"Reprogramming.method")))
+                selectInput("select_reprogramming_method_add", "Reprogramming method:", choices = c("", values$unique$Reprogramming.method))
               ),
               box(
                 width = NULL,
-                selectInput("select_media_add", "Media:", choices = c("", unique(dummy_cell_lines$Media)))
+                selectInput("select_media_add", "Media:", choices = c("", values$unique$Media))
               ),
             ),
             column(
@@ -258,7 +265,7 @@ server <- function(input, output) {
               ),
               box(
                 width = NULL,
-                selectInput("select_pools_add", "Pools:", choices = c("", unique(dummy_cell_lines$Pools)))
+                selectInput("select_pools_add", "Pools:", choices = c("", values$unique$Pools))
               ),
               box(
                 width = NULL,
@@ -274,7 +281,7 @@ server <- function(input, output) {
               ),
               box(
                 width = NULL,
-                selectInput("select_ecm_add", "ECM:", choices = c("", unique(dummy_cell_lines$ECM)))
+                selectInput("select_ecm_add", "ECM:", choices = c("", values$unique$ECM))
               ),
             ),
             column(
@@ -293,15 +300,15 @@ server <- function(input, output) {
               ),
               box(
                 width = NULL,
-                selectInput("select_origin_add", "Origin:", choices = c(unique(dummy_cell_lines$Origin)))
+                selectInput("select_origin_add", "Origin:", choices = c("", values$unique$Origin))
               ),
               box(
                 width = NULL,
-                selectInput("select_crispr_edit_add", "CRISPR EDIT:", choices = c("", unique(dummy_cell_lines$"CRISPR.EDIT")))
+                selectInput("select_crispr_edit_add", "CRISPR EDIT:", choices = c("", values$unique$CRISPR.EDIT))
               ),
               box(
                 width = NULL,
-                selectInput("select_gender_add", "Gender:", choices = c("", unique(dummy_cell_lines$Gender)))
+                selectInput("select_gender_add", "Gender:", choices = c("", values$unique$Gender))
               ),
               box(
                 width = NULL,
@@ -321,19 +328,19 @@ server <- function(input, output) {
               ),
               box(
                 width = NULL,
-                selectInput("select_type_add", "Type:", choices = c(unique(dummy_cell_lines$Type)))
+                selectInput("select_type_add", "Type:", choices = values$unique$Type)
               ),
               box(
                 width = NULL,
-                selectInput("select_genotype_add", "Genotype:", choices = c(unique(dummy_cell_lines$Genotype)))
+                selectInput("select_genotype_add", "Genotype:", choices = values$unique$Genotype)
               ),
               box(
                 width = NULL,
-                selectInput("select_info_add", "Info:", choices = c("", unique(dummy_cell_lines$Info)))
+                selectInput("select_info_add", "Info:", choices = c("", values$unique$Info))
               ),
               box(
                 width = NULL,
-                selectInput("select_cell_number_add", "Cell number:", choices = c("", unique(dummy_cell_lines$"Cell-number")))
+                selectInput("select_cell_number_add", "Cell number:", choices = c("", values$unique$Cell.number))
               ),
               
             )
