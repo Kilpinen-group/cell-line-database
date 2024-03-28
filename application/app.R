@@ -256,7 +256,7 @@ body <- dashboardBody(
         fluidRow(
           box(
             width = 12,
-            submitButton("Add vial")
+            actionButton("add_btn", "Add vial")
           )
         )
       )
