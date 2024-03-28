@@ -208,7 +208,7 @@ server <- function(input, output) {
 
   # This is done like so to reset the inputs after the row has been added
   output$resetable_input <- renderUI({
-    times <- input$add_btn
+    times <- input$add_btn + input$reset_btn
 
     box (
           id=letters[(times %% length(letters)) + 1],
@@ -358,8 +358,12 @@ server <- function(input, output) {
           ),
           fluidRow(
             box(
-              width = 12,
+              width = 6,
               actionButton("add_btn", "Add vial")
+            ),
+            box(
+              width = 6,
+              actionButton("reset_btn", "Reset values")
             )
           )
         )
