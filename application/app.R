@@ -15,8 +15,9 @@ sidebar <- dashboardSidebar(
              menuSubItem("Explore lines", tabName = "lines"),
              menuSubItem("Find empty space", tabName = "space")
     ),
-    menuItem("Add vials", tabName= "add", icon = icon("square-plus")),
-    menuItem("Remove vials", tabName= "remove", icon = icon("square-minus")),
+    menuItem("Edit vials", tabName= "edit_vials", icon = icon("vials"),
+             menuSubItem("Add vials", tabName= "add", icon = icon("square-plus")),
+             menuSubItem("Remove vials", tabName= "remove", icon = icon("square-minus"))),
     menuItem("History", tabName= "history", icon = icon("history"))
   )
 )
@@ -99,6 +100,166 @@ body <- dashboardBody(
             style = "max-height: 400px; overflow-y: auto;",
             dataTableOutput("filtered_data_table")
           )
+        )
+      )
+    ),
+    tabItem(
+      tabName = "add",
+      fluidRow(
+        column(
+          width = 3,
+          box(
+            width = NULL,
+            selectInput("select_tank_add", "Tank:", choices = c(unique(dummy_cell_lines$Tank)))
+          ),
+          box(
+            width = NULL,
+            selectInput("select_line_add", "Line:", choices = c(unique(dummy_cell_lines$Line)))
+          ),
+          box(
+            width = NULL,
+            selectInput("select_subtype_add", "Subtype:", choices = c(unique(dummy_cell_lines$Subtype)))
+          ),
+          box(
+            width = NULL,
+            selectInput("select_reprogramming_method_add", "Reprogramming method:", choices = c("None", unique(dummy_cell_lines$"Reprogramming.method")))
+          ),
+          box(
+            width = NULL,
+            selectInput("select_media_add", "Media:", choices = c("NA", unique(dummy_cell_lines$Media)))
+          ),
+        ),
+        column(
+          width = 3,
+          box(
+            width = NULL,
+            numericInput(
+              "select_rack_stick_add",
+              "Rack/Stick:",
+              1,
+              min = 1,
+              max = 12,
+              step = 1,
+              width = NULL
+            )
+          ),
+          box(
+            width = NULL,
+            textInput("select_passage_add", "Passage:", "")
+          ),
+          box(
+            width = NULL,
+            selectInput("select_pools_add", "Pools:", choices = c(unique(dummy_cell_lines$Pools)))
+          ),
+          box(
+            width = NULL,
+            numericInput(
+              "select_age_add",
+              "Age:",
+              0,
+              min = 0,
+              max = 110,
+              step = 1,
+              width = NULL
+            )
+          ),
+          box(
+            width = NULL,
+            selectInput("select_ecm_add", "ECM:", choices = c("NA", unique(dummy_cell_lines$ECM)))
+          ),
+        ),
+        column(
+          width = 3,
+          box(
+            width = NULL,
+            numericInput(
+              "select_box_add",
+              "Box:",
+              1,
+              min = 1,
+              max = 11,
+              step = 1,
+              width = NULL
+            )
+          ),
+          box(
+            width = NULL,
+            selectInput("select_origin_add", "Origin:", choices = c(unique(dummy_cell_lines$Origin)))
+          ),
+          box(
+            width = NULL,
+            selectInput("select_crispr_edit_add", "CRISPR EDIT:", choices = c(unique(dummy_cell_lines$"CRISPR.EDIT")))
+          ),
+          box(
+            width = NULL,
+            selectInput("select_gender_add", "Gender:", choices = c("NA", unique(dummy_cell_lines$Gender)))
+          ),
+          box(
+            width = NULL,
+            dateInput(
+              "select_date_add",
+              "Date:",
+              format = "dd/mm/yyyy",
+            )
+          ),
+          
+        ),
+        column(
+          width = 3,
+          box(
+            width = NULL,
+            textInput("select_location_add", "Location:", "")
+          ),
+          box(
+            width = NULL,
+            selectInput("select_type_add", "Type:", choices = c(unique(dummy_cell_lines$Type)))
+          ),
+          box(
+            width = NULL,
+            selectInput("select_genotype_add", "Genotype:", choices = c(unique(dummy_cell_lines$Genotype)))
+          ),
+          box(
+            width = NULL,
+            selectInput("select_info_add", "Info:", choices = c("NA", unique(dummy_cell_lines$Info)))
+          ),
+          box(
+            width = NULL,
+            selectInput("select_cell_number_add", "Cell number:", choices = c("NA", unique(dummy_cell_lines$"Cell-number")))
+          ),
+          
+        )
+      ),
+      fluidRow(
+        box(
+          width = 3,
+          numericInput(
+            "select_confluency_add",
+            "Confluency:",
+            NA,
+            min = 0,
+            max = 100,
+            step = 1,
+            width = NULL
+          )
+        ),
+        box(
+          width = 9,
+          textInput("select_notes_add", "Notes:", "")
+        )
+      ),
+      fluidRow(
+        box(
+          width = 12,
+          submitButton("Add vial")
+        )
+      )
+    ),
+    tabItem(
+      tabName = "remove",
+      fluidRow(
+        box(
+          width = 12,
+          style = "height: 400px"
         )
       )
     )
