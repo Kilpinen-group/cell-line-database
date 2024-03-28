@@ -132,6 +132,19 @@ body <- dashboardBody(
           dataTableOutput("cell_lines_table_data_remove")
         )
       )
+    ),
+    tabItem(
+      tabName = "add_value",
+      uiOutput('add_input')
+    ),
+    tabItem(
+      tabName = "remove_value",
+      fluidRow(
+        box(
+          width = 12,
+          style = "height: 650px; overflow-y: scroll;",
+        )
+      )
     )
   )
 )
@@ -394,6 +407,30 @@ server <- function(input, output) {
     if (!is.null(rows)) {
       values$df <- values$df[-rows, ]
     }
+  })
+
+  # Adding allowed values
+  output$add_input <- renderUI({
+    times <- input$add_allowed_btn
+    fluidRow(
+      id=letters[(times %% length(letters)) + 1],
+      box(
+        width = 6,
+        selectInput("select_column_add", "Select column:", choices = names(values$df))
+      ),
+      box(
+        width = 6,
+        textInput("select_column_addee", "New value:", "")
+      ),
+      box(
+        width = 12,
+        actionButton("add_allowed_btn", "Add allowed value")
+      )
+    )
+  })
+
+  observeEvent(input$add_allowed_btn, {
+    values$unique[[input$select_column_add]] <- append(values$unique[[input$select_column_add]], input$select_column_addee)
   })
   
 }
