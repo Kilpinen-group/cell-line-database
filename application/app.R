@@ -121,8 +121,15 @@ body <- dashboardBody(
       tabName = "remove",
       fluidRow(
         box(
+          width = 6,
+          actionButton("delete_row_btn", "Remove selected vial(s)")
+        )
+      ),
+      fluidRow(
+        box(
           width = 12,
-          style = "height: 400px"
+          style = "height: 600px; overflow-y: scroll;",
+          dataTableOutput("cell_lines_table_data_remove")
         )
       )
     )
@@ -375,6 +382,19 @@ server <- function(input, output) {
           )
         )
     })
+
+    # View data page
+  output$cell_lines_table_data_remove <- DT::renderDataTable({
+    DT::datatable(values$df, filter = "top")
+  })
+
+  # Removing lines
+  observeEvent(input$delete_row_btn, {
+    rows <- input$cell_lines_table_data_remove_rows_selected
+    if (!is.null(rows)) {
+      values$df <- values$df[-rows, ]
+    }
+  })
   
 }
 
