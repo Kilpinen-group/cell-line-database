@@ -139,12 +139,7 @@ body <- dashboardBody(
     ),
     tabItem(
       tabName = "remove_value",
-      fluidRow(
-        box(
-          width = 12,
-          style = "height: 650px; overflow-y: scroll;",
-        )
-      )
+      uiOutput('remove_input')
     )
   )
 )
@@ -431,6 +426,32 @@ server <- function(input, output) {
 
   observeEvent(input$add_allowed_btn, {
     values$unique[[input$select_column_add]] <- append(values$unique[[input$select_column_add]], input$select_column_addee)
+  })
+
+  # Removing allowed values
+  output$remove_input <- renderUI({
+    times <- input$remove_allowed_btn
+    fluidRow(
+      # This is used to force the reloading of values to occur when the button is pushed
+      id=letters[(times %% length(letters)) + 1],
+      box(
+        width = 6,
+        selectInput("select_column_remove", "Select column:", choices = names(values$df))
+      ),
+      box(
+        width = 6,
+        textInput("select_column_removeable", "Value to be removed:", "")
+      ),
+      box(
+        width = 12,
+        actionButton("remove_allowed_btn", "Remove allowed value")
+      )
+    )
+  })
+
+  observeEvent(input$remove_allowed_btn, {
+    column <- values$unique[[input$select_column_remove]]
+    values$unique[[input$select_column_remove]] <- column[!(column == input$select_column_removeable)]
   })
   
 }
