@@ -2,6 +2,11 @@ library(shiny)
 library(shinydashboard)
 library(ggplot2)
 library(DT)
+library(DBI)
+library(RMariaDB)
+
+# Database
+# con <- dbConnect(MySQL::MariaDB(), group = "my-db", dbname="cell-line")
 
 dummy_cell_lines <- read.csv('data/dummy_data.csv')
 
