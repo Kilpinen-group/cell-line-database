@@ -2,6 +2,7 @@ library(shiny)
 library(shinydashboard)
 library(ggplot2)
 library(DT)
+library(plotly)
 
 dummy_cell_lines <- read.csv('data/dummy_data.csv')
 
@@ -114,6 +115,34 @@ body <- dashboardBody(
       )
     ),
     tabItem(
+      tabName = "space",
+      fluidRow(
+        column(
+          width = 4,
+          selectInput("select_tank_space", "Select Tank:", choices = unique(dummy_cell_lines$Tank), selected = "Tank4_BM1")
+        ),
+        column(
+          width = 4,
+          selectInput("select_rack_space", "Select Rack:", choices = NULL)
+        ),
+        column(
+          width = 4,
+          selectInput("select_box_space", "Select Box:", choices = NULL)
+        )
+      ),
+      fluidRow(
+        column(
+          width = 8,
+          box(
+            title = "Empty Space Visualization",
+            width = NULL,
+            style = "overflow-x: auto;",
+            plotlyOutput("empty_space_plot")
+          )
+        )
+      )
+    ),
+    tabItem(
       tabName = "add",
       uiOutput('resetable_input'),
     ),
@@ -147,7 +176,7 @@ body <- dashboardBody(
 # Wrap ui components together
 ui <- dashboardPage(header, sidebar, body)
 
-server <- function(input, output) {
+server <- function(input, output, session) {
   
   values <- reactiveValues(df = dummy_cell_lines, unique = unique_values)
   
@@ -208,6 +237,77 @@ server <- function(input, output) {
     current_filtered_data_lines <- current_filtered_data_lines[current_filtered_data_lines$Line == input$select_line, ]
     DT::datatable(current_filtered_data_lines)
   })
+  
+  #Empty space
+  observeEvent(input$select_tank_space, {
+    tank_racks <- subset(dummy_cell_lines, Tank == input$select_tank_space)$Rack.Stick
+    updateSelectInput(session, "select_rack_space", "Select Rack:", choices = c(unique(tank_racks)))
+  })
+  
+  observeEvent(c(input$select_tank_space, input$select_rack_space), {
+    filtered_boxes <- subset(dummy_cell_lines, Tank == input$select_tank_space & Rack.Stick == input$select_rack_space)$Box
+    updateSelectInput(session, "select_box_space", "Select Box:", choices = c(unique(filtered_boxes)))
+  })
+  
+  grid_size <- reactive({
+    switch(input$select_tank_space,
+           "Tank4_BM1" = 5,
+           "NCTank_BM1" = 9,
+           "Glacier_BM2" = 9)
+  })
+  
+  output$empty_space_plot <- renderPlotly({
+    size <- grid_size()
+    
+    if (input$select_tank_space == "Tank4_BM1") {
+      row_values <- rep(1:size, each = size)
+      col_values <- rep(1:size, times = size)
+      
+      grid_data <- expand.grid(
+        Row = factor(row_values, levels = 1:size),
+        Col = factor(col_values, levels = 1:size)
+      )
+      
+      text_labels <- data.frame(
+        Row = row_values,
+        Col = col_values,
+        Label = 1:(size^2)
+      )
+    } else {
+      row_values <- rep(LETTERS[1:size], each = size)
+      col_values <- 1:size
+      
+      grid_data <- expand.grid(
+        Row = factor(row_values, levels = LETTERS[1:size]),
+        Col = factor(col_values, levels = as.character(1:size))
+      )
+      
+      text_labels <- data.frame(
+        Row = row_values,
+        Col = col_values,
+        Label = paste0(row_values, col_values)
+      )
+    }
+    
+    p <- ggplot(grid_data, aes(x = Col, y = Row)) +
+      geom_tile(color = "black", fill = "green") +
+      geom_text(data = text_labels, aes(x = Col, y = Row, label = Label), color = "black") +
+      scale_x_discrete(expand = c(0, 0)) +
+      scale_y_discrete(expand = c(0, 0)) +
+      labs(title = paste(input$select_tank_space, "Rack", input$select_rack_space, "Box", input$select_box_space),
+           x = "Column", y = "Row") +
+      theme_minimal() +
+      theme(
+        axis.title = element_text(size = 12),
+        axis.text = element_text(size = 10),
+        plot.title = element_text(size = 14, hjust = 0.5)
+      ) +
+      coord_fixed(ratio = 1)
+    
+    ggplotly(p)
+  })
+  
+  
   
   # Adding lines
   observeEvent(input$add_btn, {
