@@ -13,6 +13,9 @@ for(col in names(dummy_cell_lines)) {
   unique_values[[col]] <- unique(dummy_cell_lines[[col]])
 }
 
+# Initialize bar charts
+bar_chart_values <- c("Origin", "Type")
+
 header <- dashboardHeader(title="Welcome!")
 
 sidebar <- dashboardSidebar(
@@ -178,7 +181,7 @@ ui <- dashboardPage(header, sidebar, body)
 
 server <- function(input, output, session) {
   
-  values <- reactiveValues(df = dummy_cell_lines, unique = unique_values)
+  values <- reactiveValues(df = dummy_cell_lines, unique = unique_values, bar_chart = bar_chart_values)
   
   # View data page
   output$cell_lines_table_data <- DT::renderDataTable({
@@ -218,8 +221,24 @@ server <- function(input, output, session) {
   })
   
   # Explore lines page
-  output$select_line <- renderUI({
-    selectInput("select_line", "Select Line:", choices = unique(filtered_data_lines()$Line))
+  output$chart <- renderPlot({
+    req(input$select_column)
+    if (input$select_column %in% values$bar_chart) {
+      value_counts <- table(filtered_data()[[input$select_column]])
+      value_counts_df <- as.data.frame(value_counts)
+      names(value_counts_df) <- c("Value", "Count")
+      ggplot(value_counts_df, aes(x = "", y = Count, fill=Value)) +
+        geom_col() +
+        coord_polar(theta = "y", start = 0) +
+        geom_text(aes(label = Count), position = position_stack(vjust=0.5)) +
+        labs(title = paste("Pie Chart of", input$select_column)) +
+        theme(axis.text.x = element_text(angle = 45, hjust = 1))
+    } else {
+      ggplot(filtered_data(), aes_string(x = input$select_column)) +
+        geom_bar() +
+        labs(title = paste("Bar Chart of", input$select_column)) +
+        theme(axis.text.x = element_text(angle = 45, hjust = 1))
+    }
   })
   
   output$line_passages_plot <- renderPlot({
@@ -227,7 +246,10 @@ server <- function(input, output, session) {
 
     current_filtered_data_lines <- filtered_data_lines()
     current_filtered_data_lines <- current_filtered_data_lines[current_filtered_data_lines$Line == input$select_line, ]
-    ggplot(current_filtered_data_lines, aes(x = Passage)) + geom_bar() + labs(title = paste("Passages for Line", input$select_line))
+    value_counts <- table(current_filtered_data_lines$Passage)
+    value_counts_df <- as.data.frame(value_counts)
+    names(value_counts_df) <- c("Value", "Count")
+    ggplot(value_counts_df, aes(x = "", y= Count, fill= Value)) + geom_col() + coord_polar(theta = "y", start = 0) + geom_text(aes(label = Count), position = position_stack(vjust=0.5)) + labs(title = paste("Passages for Line", input$select_line))
   })
   
   output$filtered_data_table <- DT::renderDataTable({
