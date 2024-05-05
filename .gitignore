@@ -1,2 +1,5 @@
 preprocessing/*.xls*
 preprocessing/*.txt
+.Rhistory
+*.RDS
+application/.Rhistory

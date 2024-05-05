@@ -229,6 +229,10 @@ server <- function(input, output, session) {
   })
   
   # Explore lines page
+  output$select_line <- renderUI({
+    selectInput("select_line", "Select Line:", choices = unique(filtered_data_lines()$Line))
+  })
+
   output$chart <- renderPlot({
     req(input$select_column)
     if (input$select_column %in% values$bar_chart) {
