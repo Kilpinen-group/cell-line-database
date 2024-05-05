@@ -29,57 +29,88 @@ sidebar <- dashboardSidebar(
  )
 )
 
-# Empty for now
-body <- dashboardBody()
-
-# ui <- page_sidebar(
-#   title = "Census_seq Experiments",
-  
-#   sidebar = sidebar(
-#     selectInput(
-#       inputId = "experiment",
-#       label = "Choose the experiment:",
-#       choices = experiments,
-#       selected = experiments[1]
-#     )
-#   ),
-  
-#   layout_columns(
-#     #card(
-#       height = 500,
-#       layout_columns(
-#         card(
-#           card_header(textOutput("pool_header")),
-#           max_height = 500,
-#           style = "resize:vertical;",
-#           card_body(
-#             min_height = 500,
-#             plotlyOutput("pool")
-#           )
-#         ),
-#         layout_columns(
-#             card(textOutput("samples")),
-#             card(tableOutput("passagesDays")),
-#             card(tableOutput("systems")),
-#             col_widths = c(12,12,12),
-#             row_heights = c(1, 2,2)
-#         ),
-#       ),
-#     #),
-#     row_heights = c(1,1)
-#   ),
-    
-#   card(
-#     #height = 400,
-#     style = "resize:vertical;",
-#     card_body(
-#       min_height = 200,
-#       div(
-#         DT::dataTableOutput("lines")),
-#     )
-#   )
-
-# )
+# The logic is the following: You have to put the same tabName to the above menuItems' and the below tabItems'.
+# tabItem defines a tab, fluidRow defines a row that by default can extend in y direction
+# Inside fluidRow, you can put columns that can take space between 1-12 (each row is divided into 12 pieces)
+# width = NULL is probably not necessary, this might be the default, i.e. it extends as much as needed or possible
+body <- dashboardBody(
+  tabItems(
+    # TO-DO: Implement this similarily (Ctrl+c and Ctrl+v) from front-end branch, uncomment line etc.
+    tabItem(
+      tabName = "data",
+      fluidRow(
+        box(
+            width = NULL,
+            selectInput(
+              inputId = "experiment_view_data",
+              label = "Choose the experiment:",
+              choices = c("All", experiments),
+              selected = "All"
+            )
+          )
+      ),
+      fluidRow(
+        box(
+          width = 12,
+          style = "height: 650px; overflow-y: scroll;",
+          DT::dataTableOutput("lines")
+          # dataTableOutput("cell_lines_table_data")
+        )
+      )
+    ),
+    tabItem(
+      tabName = "experiments",
+      fluidRow(
+        column(
+          width = 6,
+          box(
+            width = NULL,
+            selectInput(
+              inputId = "experiment",
+              label = "Choose the experiment:",
+              choices = experiments,
+              selected = experiments[1]
+            )
+          )
+        ),
+        column(
+          width = 6,
+          box(
+            width = NULL,
+            textOutput("samples"),
+          )
+        )
+      ),
+      fluidRow(
+        column(
+          width = 12,
+          box(
+            title = "Pools for the experiment",
+            width = NULL,
+            style = "overflow-x: auto;",
+            plotlyOutput("pool")
+          )
+        )
+      ),
+      fluidRow(
+        column(
+          width = 6,
+          box(
+            width = NULL,
+            tableOutput("passagesDays")
+          )
+        ),
+        column(
+          width = 6,
+          box(
+            width = NULL,
+            tableOutput("systems")
+          )
+        )
+      )
+    )
+  )
+)
 
 # Wrap all UI items together
 ui <- dashboardPage(header, sidebar, body)
@@ -93,6 +124,15 @@ server <- function(input, output, session) {
   selected_experiments <- reactive({
     obj[obj$Experiment == input$experiment, ]
   })
+
+  selected_experiments_view_data <- reactive({
+    if (input$experiment_view_data == "All") {
+      obj
+    } else {
+      obj[obj$Experiment == input$experiment_view_data, ]
+    }
+  })
+
   
   output$samples <- renderText({
     experiment_data <- selected_experiments()
@@ -165,7 +205,7 @@ server <- function(input, output, session) {
   })
   
   output$lines <- DT::renderDataTable({
-    data <- selected_experiments()
+    data <- selected_experiments_view_data()
     DT::datatable(data, filter = "top") 
   })
   
