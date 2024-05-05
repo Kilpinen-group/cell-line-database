@@ -16,66 +16,73 @@ experiments <- unique(obj$Experiment)
 ### UI ###
 # Controls the layout and appearance
 
-#header <- dashboardHeader(title="Census_seq Experiments")
+header <- dashboardHeader(title="Census_seq Experiments")
 
-#sidebar <- dashboardSidebar(
-#  sidebarMenu(
-#    menuItem("Experiments", tabName = experiments),
-#    menuItem("Lines")
-#  )
-#)
-
-ui <- page_sidebar(
-  title = "Census_seq Experiments",
-  
-  sidebar = sidebar(
-    selectInput(
-      inputId = "experiment",
-      label = "Choose the experiment:",
-      choices = experiments,
-      selected = experiments[1]
+sidebar <- dashboardSidebar(
+ sidebarMenu(
+    menuItem("View data", tabName = "data", icon = icon("table")),
+    menuItem("Visualize data", tabName = "visualization", icon = icon("chart-simple"),
+             menuSubItem("Explore experiments", tabName = "experiments"),
+             menuSubItem("Explore lines", tabName = "lines"),
+             menuSubItem("Search by Day/Passage", tabName = "day")
     )
-  ),
-  
-  layout_columns(
-    #card(
-      height = 500,
-      layout_columns(
-        card(
-          card_header(textOutput("pool_header")),
-          max_height = 500,
-          style = "resize:vertical;",
-          card_body(
-            min_height = 500,
-            plotlyOutput("pool")
-          )
-        ),
-        layout_columns(
-            card(textOutput("samples")),
-            card(tableOutput("passagesDays")),
-            card(tableOutput("systems")),
-            col_widths = c(12,12,12),
-            row_heights = c(1, 2,2)
-        ),
-      ),
-    #),
-    row_heights = c(1,1)
-  ),
-    
-  card(
-    #height = 400,
-    style = "resize:vertical;",
-    card_body(
-      min_height = 200,
-      div(
-        DT::dataTableOutput("lines")),
-    )
-  )
-
+ )
 )
 
+# Empty for now
+body <- dashboardBody()
+
+# ui <- page_sidebar(
+#   title = "Census_seq Experiments",
+  
+#   sidebar = sidebar(
+#     selectInput(
+#       inputId = "experiment",
+#       label = "Choose the experiment:",
+#       choices = experiments,
+#       selected = experiments[1]
+#     )
+#   ),
+  
+#   layout_columns(
+#     #card(
+#       height = 500,
+#       layout_columns(
+#         card(
+#           card_header(textOutput("pool_header")),
+#           max_height = 500,
+#           style = "resize:vertical;",
+#           card_body(
+#             min_height = 500,
+#             plotlyOutput("pool")
+#           )
+#         ),
+#         layout_columns(
+#             card(textOutput("samples")),
+#             card(tableOutput("passagesDays")),
+#             card(tableOutput("systems")),
+#             col_widths = c(12,12,12),
+#             row_heights = c(1, 2,2)
+#         ),
+#       ),
+#     #),
+#     row_heights = c(1,1)
+#   ),
+    
+#   card(
+#     #height = 400,
+#     style = "resize:vertical;",
+#     card_body(
+#       min_height = 200,
+#       div(
+#         DT::dataTableOutput("lines")),
+#     )
+#   )
+
+# )
+
 # Wrap all UI items together
-#ui <- dashboardPage(header, sidebar, body)
+ui <- dashboardPage(header, sidebar, body)
 
 ### SERVER ###
 # Server logic for ui
