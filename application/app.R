@@ -274,12 +274,12 @@ server <- function(input, output, session) {
   
   #Empty space
   observeEvent(input$select_tank_space, {
-    tank_racks <- subset(dummy_cell_lines, Tank == input$select_tank_space)$Rack.Stick
+    tank_racks <- subset(values$df, Tank == input$select_tank_space)$Rack.Stick
     updateSelectInput(session, "select_rack_space", "Select Rack:", choices = c(unique(tank_racks)))
   })
   
   observeEvent(c(input$select_tank_space, input$select_rack_space), {
-    filtered_boxes <- subset(dummy_cell_lines, Tank == input$select_tank_space & Rack.Stick == input$select_rack_space)$Box
+    filtered_boxes <- subset(values$df, Tank == input$select_tank_space & Rack.Stick == input$select_rack_space)$Box
     updateSelectInput(session, "select_box_space", "Select Box:", choices = c(unique(filtered_boxes)))
   })
   
@@ -320,7 +320,7 @@ server <- function(input, output, session) {
       text_labels$Label <- paste0(label_values$Var1, label_values$Var2)
     }
     
-    filtered_data <- subset(dummy_cell_lines, 
+    filtered_data <- subset(values$df, 
                             Tank == input$select_tank_space & 
                               Rack.Stick == input$select_rack_space & 
                               Box == input$select_box_space)
