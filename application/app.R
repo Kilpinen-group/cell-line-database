@@ -20,6 +20,7 @@ header <- dashboardHeader(title="Welcome!")
 
 sidebar <- dashboardSidebar(
   sidebarMenu(
+    id = "tabs",
     menuItem("View data", tabName = "data", icon = icon("table")),
     menuItem("Visualize data", tabName = "visualization", icon = icon("chart-simple"),
              menuSubItem("Explore tanks", tabName = "tanks"),
@@ -122,7 +123,7 @@ body <- dashboardBody(
       fluidRow(
         column(
           width = 4,
-          selectInput("select_tank_space", "Select Tank:", choices = unique(dummy_cell_lines$Tank), selected = "Tank4_BM1")
+          selectInput("select_tank_space", "Select Tank:", choices = unique(dummy_cell_lines$Tank), selected = "NCTank_BM1")
         ),
         column(
           width = 4,
@@ -135,12 +136,19 @@ body <- dashboardBody(
       ),
       fluidRow(
         column(
-          width = 8,
+          width = 6,
           box(
             title = "Empty Space Visualization",
             width = NULL,
             style = "overflow-x: auto;",
             plotlyOutput("empty_space_plot")
+          )
+        ),
+        column(
+          width = 6,
+          box(
+            selectInput("select_empty_spot", "Select Empty Spot:", choices = NULL),
+            actionButton("add_vial_button", "Go to add a vial")
           )
         )
       )
@@ -278,42 +286,59 @@ server <- function(input, output, session) {
            "Glacier_BM2" = 9)
   })
   
+  
   output$empty_space_plot <- renderPlotly({
     size <- grid_size()
     
     if (input$select_tank_space == "Tank4_BM1") {
-      row_values <- rep(1:size, each = size)
-      col_values <- rep(1:size, times = size)
+      row_values <- rep(1:size)
+      col_values <- rep(1:size)
       
       grid_data <- expand.grid(
-        Row = factor(row_values, levels = 1:size),
+        Row = factor(row_values, levels = rev(1:size)),
         Col = factor(col_values, levels = 1:size)
       )
       
-      text_labels <- data.frame(
-        Row = row_values,
-        Col = col_values,
-        Label = 1:(size^2)
-      )
+      text_labels <- grid_data
+      text_labels$Label <- c(1,6,11,16,21,2,7,12,17,22,3,8,13,18,23,4,9,14,19,24,5,10,15,20,25)
+      
     } else {
-      row_values <- rep(LETTERS[1:size], each = size)
+      row_values <- rep(LETTERS[1:size])
       col_values <- 1:size
       
       grid_data <- expand.grid(
-        Row = factor(row_values, levels = LETTERS[1:size]),
+        Row = factor(row_values, levels = LETTERS[size:1]),
         Col = factor(col_values, levels = as.character(1:size))
       )
       
-      text_labels <- data.frame(
-        Row = row_values,
-        Col = col_values,
-        Label = paste0(row_values, col_values)
-      )
+      text_labels <- grid_data
+      label_values <- expand.grid(LETTERS[1:9], 1:9)
+      text_labels$Label <- paste0(label_values$Var1, label_values$Var2)
     }
     
+    filtered_data <- subset(dummy_cell_lines, 
+                            Tank == input$select_tank_space & 
+                              Rack.Stick == input$select_rack_space & 
+                              Box == input$select_box_space)
+    
+    taken_spots <- filtered_data$Location
+    
+    text_labels$Taken <- ifelse(text_labels$Label %in% taken_spots, "Taken", "Empty")
+    
+    observe({
+      empty_spots <- unique(text_labels$Label[text_labels$Taken == "Empty"])
+      
+      empty_spots_sorted <- sort(empty_spots)
+      
+      updateSelectInput(session, "select_empty_spot", choices = empty_spots_sorted)
+    })
+    
+    Label <- text_labels$Taken
+    
     p <- ggplot(grid_data, aes(x = Col, y = Row)) +
-      geom_tile(color = "black", fill = "green") +
+      geom_tile(aes(fill = Label), color = "black", size = 0.5) +
       geom_text(data = text_labels, aes(x = Col, y = Row, label = Label), color = "black") +
+      scale_fill_manual(values = c(Taken = "red", Empty = "green"), name = NULL) +
       scale_x_discrete(expand = c(0, 0)) +
       scale_y_discrete(expand = c(0, 0)) +
       labs(title = paste(input$select_tank_space, "Rack", input$select_rack_space, "Box", input$select_box_space),
@@ -329,6 +354,16 @@ server <- function(input, output, session) {
     ggplotly(p)
   })
   
+  selected_values <- reactiveValues()
+  
+  observeEvent(input$add_vial_button, {
+    selected_values$tank <- input$select_tank_space
+    selected_values$rack <- input$select_rack_space
+    selected_values$box <- input$select_box_space
+    selected_values$location <- input$select_empty_spot
+    
+    updateTabItems(session, "tabs", selected = "add")
+  })
   
   
   # Adding lines
@@ -363,7 +398,7 @@ server <- function(input, output, session) {
               width = 3,
               box(
                 width = NULL,
-                selectInput("select_tank_add", "Tank:", choices = values$unique$Tank)
+                selectInput("select_tank_add", "Tank:", choices = values$unique$Tank, selected = selected_values$tank)
               ),
               box(
                 width = NULL,
@@ -389,7 +424,7 @@ server <- function(input, output, session) {
                 numericInput(
                   "select_rack_stick_add",
                   "Rack/Stick:",
-                  1,
+                  value= selected_values$rack,
                   min = 1,
                   max = 12,
                   step = 1,
@@ -428,7 +463,7 @@ server <- function(input, output, session) {
                 numericInput(
                   "select_box_add",
                   "Box:",
-                  1,
+                  value = selected_values$box,
                   min = 1,
                   max = 11,
                   step = 1,
@@ -461,7 +496,7 @@ server <- function(input, output, session) {
               width = 3,
               box(
                 width = NULL,
-                textInput("select_location_add", "Location:", "")
+                textInput("select_location_add", "Location:", value = selected_values$location)
               ),
               box(
                 width = NULL,
