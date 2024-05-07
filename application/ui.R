@@ -1,3 +1,5 @@
+# ui.R
+
 # This file is responsible for defining the UI layout of the Shiny app.
 # It contains functions that construct different parts of the UI, organized
 # based on the app's features and components.

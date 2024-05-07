@@ -1,16 +1,7 @@
+# server.R
+
 # This file is responsible for defining the server logic of the Shiny app.
 # It contains functions that handle the behavior and interactions of the app's features.
-
-# Function to initialize the data used by the app
-initializeData <- function(data_path) {
-  data <- read.csv(data_path)
-  
-  unique_values <- lapply(data, unique)
-  
-  bar_chart_values <- c("Origin", "Type")
-  
-  reactiveValues(df = data, unique = unique_values, bar_chart = bar_chart_values)
-}
 
 # Function to define the server logic for viewing data feature
 viewDataFeature <- function(input, output, session, values) {
@@ -32,6 +23,7 @@ exploreTanksPage <- function(input, output, session, values) {
   
   
   filtered_data <- reactive({
+    req(input$select_tank)
     if (input$select_tank == "All") {
       filtered_data <- values$df
     } else {
@@ -42,20 +34,22 @@ exploreTanksPage <- function(input, output, session, values) {
   
   output$chart <- renderPlot({
     req(input$select_column)
+    data <- filtered_data()
+    column <- input$select_column
     if (input$select_column %in% values$bar_chart) {
-      value_counts <- table(filtered_data()[[input$select_column]])
+      value_counts <- table(data[[column]])
       value_counts_df <- as.data.frame(value_counts)
       names(value_counts_df) <- c("Value", "Count")
       ggplot(value_counts_df, aes(x = "", y = Count, fill=Value)) +
         geom_col() +
         coord_polar(theta = "y", start = 0) +
         geom_text(aes(label = Count), position = position_stack(vjust=0.5)) +
-        labs(title = paste("Pie Chart of", input$select_column)) +
+        labs(title = paste("Pie Chart of", column)) +
         theme(axis.text.x = element_text(angle = 45, hjust = 1))
     } else {
-      ggplot(filtered_data(), aes_string(x = input$select_column)) +
+      ggplot(data, aes_string(x = column)) +
         geom_bar() +
-        labs(title = paste("Bar Chart of", input$select_column)) +
+        labs(title = paste("Bar Chart of", column)) +
         theme(axis.text.x = element_text(angle = 45, hjust = 1))
     }
   })
@@ -72,6 +66,7 @@ exploreLinesPage <- function(input, output, session, values) {
   })
   
   filtered_data_lines <- reactive({
+    req(input$select_tank_lines)
     if (input$select_tank_lines == "All") {
       filtered_data_lines <- values$df
     } else {
@@ -85,11 +80,21 @@ exploreLinesPage <- function(input, output, session, values) {
     
     current_filtered_data_lines <- filtered_data_lines()
     current_filtered_data_lines <- current_filtered_data_lines[current_filtered_data_lines$Line == input$select_line, ]
-    value_counts <- table(current_filtered_data_lines$Passage)
-    value_counts_df <- as.data.frame(value_counts)
-    names(value_counts_df) <- c("Value", "Count")
-    ggplot(value_counts_df, aes(x = "", y= Count, fill= Value)) + geom_col() + coord_polar(theta = "y", start = 0) + geom_text(aes(label = Count), position = position_stack(vjust=0.5)) + labs(title = paste("Passages for Line", input$select_line))
+    
+    # Check if value_counts_df is not empty
+    if (!is.null(current_filtered_data_lines) && nrow(current_filtered_data_lines) > 0) {
+      value_counts <- table(current_filtered_data_lines$Passage)
+      value_counts_df <- as.data.frame(value_counts)
+      names(value_counts_df) <- c("Value", "Count")
+      ggplot(value_counts_df, aes(x = "", y= Count, fill= Value)) + geom_col() + 
+        coord_polar(theta = "y", start = 0) + 
+        geom_text(aes(label = Count), position = position_stack(vjust=0.5)) + 
+        labs(title = paste("Passages for Line", input$select_line))
+    } else {
+      ggplot() + labs(title = "No data available")
+    }
   })
+  
   
   output$filtered_data_table <- DT::renderDataTable({
     req(input$select_line)
@@ -345,7 +350,7 @@ downloadDataFeature <- function(input, output, session, values) {
 # Main server function incorporating all the feature-specific server logic
 server <- function(input, output, session) {
 
-  values <- initializeData("data/dummy_data.csv")
+  values <- initializeData("data/real_data.csv")
   
   selected_values <- reactiveValues()
   
