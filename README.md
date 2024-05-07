@@ -17,7 +17,7 @@ Database management system for cell lines. The app is built using Shiny App and 
 -   [ ] Properly connect MySQL with the front end
 -   [ ] Online deployment 
 -   [ ] User authentication (with [shinyauthr](https://rdrr.io/github/PaulC91/shinyauthr/)?)
--   [ ] There might be a problem with the data/server not loading properly in the new version of the app that divides server, ui etc. to their own files
+-   [x] There might be a problem with the data/server not loading properly in the new version of the app that divides server, ui etc. to their own files
 
 ## How to run the app locally
 
@@ -31,6 +31,8 @@ The easiest way is to run the app locally. In the database folder how to get the
 6.  Enjoy! 
 
 Note that RStudio is obviously not the only way of getting it up and running, but is the easiest way of testing the application due to RStudio doing a lot of the heavy lifting. To run the Census-seq app, you do not need MySQL at all, just open its app.R file and run it. However, do not forget to add the two required data files before doing this inside census-seq folder.
+
+Make sure to use the latest version of R (4.4.0), update ALL packages, and install the latest version of RStudio.
 
 Getting the database to work might be difficult this way and require considerable effort. One approach to try to streamline the process is to use Docker and more specifically Docker's official MySQL [image](https://hub.docker.com/_/mysql). See, for example, the following [tutorial](https://www.howtogeek.com/devops/how-to-run-mysql-in-a-docker-container/).
 
