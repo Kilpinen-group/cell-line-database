@@ -334,6 +334,28 @@ ui_remove_value_tab <- function() {
   )
 }
 
+# Function to create the UI for displaying history
+ui_history_tab <- function() {
+  fluidRow(
+    column(
+      width = 6,
+      box(
+        title = "Added Lines",
+        width = NULL,
+        verbatimTextOutput("added_lines_output")
+      )
+    ),
+    column(
+      width = 6,
+      box(
+        title = "Removed Lines",
+        width = NULL,
+        verbatimTextOutput("removed_lines_output")
+      )
+    )
+  )
+}
+
 # Function to create the UI layout for downloading csv
 ui_download_csv_tab <- function() {
   fluidRow(
@@ -361,6 +383,7 @@ ui <- dashboardPage(
       tabItem(tabName = "remove", ui_remove_vials_tab()),
       tabItem(tabName = "add_value", ui_add_value_tab()),
       tabItem(tabName = "remove_value", ui_remove_value_tab()),
+      tabItem(tabName = "history", ui_history_tab()),
       tabItem(tabName = "csv", ui_download_csv_tab())
     )
   )

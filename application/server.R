@@ -220,6 +220,7 @@ addVialsFeature <- function(input, output, session, values, selected_values, his
                  input$select_cell_number_add, 
                  input$select_confluency_add)
     values$df <- rbind(values$df, new_row)
+    history_values$added_lines <- c(history_values$added_lines, paste(new_row, collapse = ", "))
   })
   
   observe({
@@ -272,6 +273,10 @@ removeVialsFeature <- function(input, output, session, values, history_values) {
     if (!is.null(rows)) {
       removed_rows <- values$df[rows, ]
       values$df <- values$df[-rows, ]
+      
+      sapply(rownames(removed_rows), function(row) {
+        history_values$removed_lines <- c(history_values$removed_lines, paste(removed_rows[row, ], collapse = ", "))
+      })
     }
   })
 }
@@ -303,6 +308,25 @@ removeAllowedValueFeature <- function(input, output, session, values) {
     column <- values$unique[[input$select_column_remove]]
     values$unique[[input$select_column_remove]] <- column[!(column == input$select_column_removeable)]
     updateTextInput(session, "select_column_removeable", value = "")
+  })
+}
+
+# Server logic to render added and removed lines in the history tab
+sessionHistoryFeature <- function(input, output, session, history_values) {
+  output$added_lines_output <- renderPrint({
+    if (length(history_values$added_lines) == 0) {
+      "No lines have been added this session."
+    } else {
+      history_values$added_lines
+    }
+  })
+  
+  output$removed_lines_output <- renderPrint({
+    if (length(history_values$removed_lines) == 0) {
+      "No lines have been removed this session."
+    } else {
+      history_values$removed_lines
+    }
   })
 }
 
@@ -339,6 +363,7 @@ server <- function(input, output, session) {
   removeVialsFeature(input, output, session, values, history_values)
   addAllowedValueFeature(input, output, session, values)
   removeAllowedValueFeature(input, output, session, values)
+  sessionHistoryFeature(input, output, session, history_values)
   downloadDataFeature(input, output, session, values)
 }
 
