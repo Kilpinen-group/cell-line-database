@@ -2,4 +2,5 @@ preprocessing/*.xls*
 preprocessing/*.txt
 .Rhistory
 *.RDS
+census-seq/*.RDS
 application/.Rhistory
