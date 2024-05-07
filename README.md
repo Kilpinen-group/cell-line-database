@@ -8,7 +8,6 @@ Database management system for cell lines. The app is built using Shiny App and 
 -   [How to run the app locally](#how-to-run-the-app-locally)
 -   [How to run the app in cloud](#how-to-run-the-app-in-cloud)
 -   [Front end](#front-end)
--   [How to run the app](#how-to-run-the-app)
 -   [Data files](#data-files)
 -   [Database](#database)
 

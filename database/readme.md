@@ -75,7 +75,7 @@ The following examples seem to be good fits:
 
 1.	Set up a MySQL server locally. Create an empty MySQL database.
 2.	Initialize the tables in the database based on the database architecture. You can use dbmysql.txt or follow the instructions under create table section in Migration.ipynb. 
-3.	Populate the empty database with data provided (the excel file). Follow instructions in Migration.ipynb.
+3.	Populate the empty database with data provided (the excel file). Follow instructions in Migration.ipynb and use the knowledge of the changes.txt file to make sure the Excel file is correct.
 4.	Connect the mysql database with ShinyApp in app.R using MariaDB, [https://github.com/r-dbi/RMariaDB?tab=readme-ov-file](https://github.com/r-dbi/RMariaDB?tab=readme-ov-file) 
 
 We have faced problems when installing RMariaDB and DBI.
