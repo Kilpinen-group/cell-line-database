@@ -19,7 +19,8 @@ ui_sidebar <- function() {
       menuItem("Edit database", tabName= "edit_database", icon = icon("database"),
                menuSubItem("Add allowed value", tabName= "add_value", icon = icon("square-plus")),
                menuSubItem("Remove allowed value", tabName= "remove_value", icon = icon("square-minus"))),
-      menuItem("History", tabName= "history", icon = icon("history"))
+      menuItem("History", tabName= "history", icon = icon("history")),
+      menuItem("Download csv", tabName = "csv", icon = icon("file"))
     )
   )
   return(sidebar)
@@ -333,6 +334,17 @@ ui_remove_value_tab <- function() {
   )
 }
 
+# Function to create the UI layout for downloading csv
+ui_download_csv_tab <- function() {
+  fluidRow(
+    box(
+      width = 12,
+      h3("Download Updated Data"),
+      downloadButton("download_csv", "updated_data.csv")
+    )
+  )
+}
+
 # Main UI layout incorporating all the tabs and components
 ui <- dashboardPage(
   dashboardHeader(title = "Welcome!"),
@@ -348,7 +360,8 @@ ui <- dashboardPage(
       tabItem(tabName = "add", ui_add_vials_tab()),
       tabItem(tabName = "remove", ui_remove_vials_tab()),
       tabItem(tabName = "add_value", ui_add_value_tab()),
-      tabItem(tabName = "remove_value", ui_remove_value_tab())
+      tabItem(tabName = "remove_value", ui_remove_value_tab()),
+      tabItem(tabName = "csv", ui_download_csv_tab())
     )
   )
 )

@@ -306,6 +306,18 @@ removeAllowedValueFeature <- function(input, output, session, values) {
   })
 }
 
+# Function to define the server logic for downloading a csv file
+downloadDataFeature <- function(input, output, session, values) {
+  output$download_csv <- downloadHandler(
+    filename = function() {
+      "updated_data.csv"
+    },
+    content = function(file) {
+      write.csv(values$df, file, row.names = FALSE)
+    }
+  )
+}
+
 # Main server function incorporating all the feature-specific server logic
 server <- function(input, output, session) {
 
@@ -327,6 +339,7 @@ server <- function(input, output, session) {
   removeVialsFeature(input, output, session, values, history_values)
   addAllowedValueFeature(input, output, session, values)
   removeAllowedValueFeature(input, output, session, values)
+  downloadDataFeature(input, output, session, values)
 }
 
 server
