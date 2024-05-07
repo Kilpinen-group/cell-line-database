@@ -1,0 +1,71 @@
+Tank,Rack/Stick,Box,Location,Line,Passage,Origin,Type,Subtype,Pools,CRISPR EDIT,Genotype,Reprogramming method,Age,Gender,Info,Media,ECM,Date,Initials,Notes,Cell number,Confluency
+Tank4_BM1,4,1,1,oikd2,p13,HipSci,iPSC,,,,WT,,,,General Stock,E8,VTN,06.09.2021,FI,,,40.0
+Tank4_BM1,4,1,2,oikd2,p13,HipSci,iPSC,,,,WT,,,,General Stock,E8,VTN,06.09.2021,FI,,,40.0
+Tank4_BM1,4,1,3,kucg2,p40,HipSci,iPSC,,,,WT,,,,General Stock,E8,VTN,04.09.2021,AS,,,80.0
+Tank4_BM1,4,1,4,letw1,p28,HipSci,iPSC,,,,WT,,,,General Stock,E8,VTN,06.09.2021,AS,Not There,,80.0
+Tank4_BM1,4,1,5,qeti1,p16,HipSci,iPSC,,,,Kabuki,,,,General Stock,E8,VTN,06.09.2021,FI,,,45.0
+Tank4_BM1,4,3,10,oadp4,p27,HipSci,iPSC,,,,Kabuki,,,,General Stock,E8,VTN,04.10.2021,RW,,,
+Tank4_BM1,4,3,11,,,,,,,,,,,,,,,,,,,
+Tank4_BM1,4,3,16,1496,p17,BSCC,iPSC,NGN2,,,INTS6,,,M,,E8/EDTA,MG,undefined,NJ,NGN2/rtTA MOI=10,,
+Tank4_BM1,4,3,17,HEL252.2,p14,BSCC,iPSC,NGN2,,,INTS6 ctrl,,,M,,E8/EDTA,MG,undefined,NJ,NGN2/rtTA MOI=10,,
+Tank4_BM1,4,3,18,aask4,p25,HipSci,iPSC,,,,Kabuki,,,,General Stock,E8,VTN,08.10.2021,RL,,,70.0
+Tank4_BM1,4,4,23,HEL245.1,p10,BSCC,iPSC,,,,INTS6,Sendai,,F,,E8,MG,undefined,NJ,,,
+Tank4_BM1,4,4,24,HEL245.1,p10,BSCC,iPSC,,,,INTS6,Sendai,,F,,E8,MG,undefined,NJ,,,
+Tank4_BM1,4,4,25,HEL245.1,p10,BSCC,iPSC,,,,INTS6,Sendai,,F,,E8,MG,undefined,NJ,,,
+Tank4_BM1,4,5,1,Pool1_ierp4_a,p6,HipSci,iPSC,,1.0,,WT/Kabuki,,,,Master Stock,E8,VTN,11.10.2021,AS,,,90.0
+Tank4_BM1,4,5,2,Pool1_ierp4_b,p6,HipSci,iPSC,,1.0,,WT/Kabuki,,,,Master Stock,E8,VTN,11.10.2021,AS,,,90.0
+Tank4_BM1,5,2,2,lise1,p29,HipSci,iPSC,,,,WT,,,,Master Stock,E8,VTN,17.08.2021,AS,,,
+Tank4_BM1,5,2,3,sojd3,p31,HipSci,iPSC,,,,WT,,,F,Master Stock,E8,VTN,11.10.2021,RL,,1/2 plate,
+Tank4_BM1,5,2,4,kute5,p29,HipSci,,,,,,,,,,,,20.08.2021,FI,,,80.0
+Tank4_BM1,5,2,5,suop5,p10,HipSci,iPSC,,,,WT,,,,Master Stock,E8,VTN,19.08.2021,AS,differentiation,,50.0
+Tank4_BM1,5,2,6,sojd3,p31,HipSci,iPSC,,,,WT,,,F,Master Stock,E8,VTN,11.10.2021,RL,,1/2 plate,
+Tank4_BM1,5,2,7,rayr1,p24,HipSci,,,,,,,,,,,,19.08.2021,AS,,,
+Tank4_BM1,5,2,8,rayr1,p25,HipSci,,,,,,,,,,,,22.08.2021,AS,,,70.0
+Tank4_BM1,6,5,22,SETD5_Kolf2_C1,p17,Sanger,iPSC,,,1.0,,,,,,E8,VTN,08.08.2023,KGK,,,
+Tank4_BM1,6,5,23,KDM6A_Kolf2_C1,p10,Sanger,iPSC,,,1.0,,,,,,E8,VTN,07.08.2023,KGK,,,
+Tank4_BM1,6,5,24,oaqd2,p22,HipSci,iPSC,,,,WT,,,,,E8,VTN,07.08.2023,KGK,,,
+Tank4_BM1,6,5,25,oaqd2,p22,HipSci,iPSC,,,,WT,,,,,E8,VTN,08.08.2023,KGK,,,
+NCTank_BM1,12,6,A1,HEL61.2,p22,BSCC,iPSC,,,,WT,Sendai,57.0,F,General Stock,E8,VTN,09.07.2021,AS,,,
+NCTank_BM1,12,6,A2,Pool 1,p6,BSCC,iPSC,,1.0,,,Sendai,,,Master Stock,E8,VTN,12.07.2021,AS,"Master stocks should be kept, not thawed",,
+NCTank_BM1,12,6,A3,HEL61.2,p15,BSCC,iPSC,,,,WT,Sendai,57.0,F,Master Stock,E8,VTN,03.02.2021,RW,Do not take,,
+NCTank_BM1,12,6,A4,Pool 3,p6,BSCC,iPSC,,1.0,,,Sendai,,,Master Stock,E8,VTN,12.07.2021,AS,To be taken to FIMM,,
+NCTank_BM1,12,6,I8,HEL62.4,p18,BSCC,iPSC,,,,WT,Sendai,72.0,F,General Stock,E8,VTN,01.03.2021,RW,,,
+NCTank_BM1,12,6,I9,HEL62.4,p18,BSCC,iPSC,,,,WT,Sendai,72.0,F,General Stock,E8,VTN,01.03.2021,RW,,,
+Glacier_BM2,1,1,A1,HEL61.2,p15,BSCC,iPSC,,,,WT,Sendai,57.0,F,Master Stock,E8,VTN,03.02.2021,RW,Do not take,,
+Glacier_BM2,1,1,A2,HEL61.2,p15,BSCC,iPSC,,,,WT,Sendai,57.0,F,Master Stock,E8,VTN,03.02.2021,RW,Do not take,,
+Glacier_BM2,1,1,A3,HEL62.4,p15,BSCC,iPSC,,,,WT,Sendai,72.0,F,Master Stock,E8,VTN,03.02.2021,RW,Do not take,,
+Glacier_BM2,1,1,A4,HEL61.1,p12,BSCC,iPSC,,,,WT,Sendai,,F,Master Stock,E8,VTN,19.04.2021,RW,,,
+Glacier_BM2,1,1,A5,HEL61.1,p12,BSCC,iPSC,,,,WT,Sendai,,F,Master Stock,E8,VTN,19.04.2021,RW,,,
+Glacier_BM2,1,1,A6,HEL11.4,p35,BSCC,iPSC,,,,WT,,,,Master Stock,E8,VTN,13.06.2021,RW,,,
+Glacier_BM2,1,1,A7,HEL11.4,p35,BSCC,iPSC,,,,WT,,,,Master Stock,E8,VTN,13.06.2021,RW,,,
+Glacier_BM2,1,2,I6,HEL61.2,d14,BSCC,NPC,Sanger,,,WT,Sendai,57.0,F,,NMM,VTN4x,09.06.2021,FI,Trial for NI Cond I (NO XAV 80%),,
+Glacier_BM2,1,2,I7,HEL61.2,d14,BSCC,NPC,Sanger,,,WT,Sendai,57.0,F,,NMM,VTN4x,09.06.2021,FI,Trial for NI Cond I (NO XAV 80%),,
+Glacier_BM2,1,2,I8,HEL61.2,d14,BSCC,NPC,Sanger,,,WT,Sendai,57.0,F,,NMM,VTN4x,09.06.2021,FI,Trial for NI Cond I (NO XAV 80%),,
+Glacier_BM2,1,2,I9,HEL62.4,d14,BSCC,NPC,Sanger,,,WT,Sendai,72.0,F,,NMM,VTN4x,09.06.2021,FI,Trial for NI Cond I (NO XAV 80%) // round morphology,,
+Glacier_BM2,1,3,A1,HEL62.4,d14,BSCC,NPC,Sanger,,,WT,Sendai,72.0,F,,NMM,VTN4x,09.06.2021,FI,Trial for NI Cond I (NO XAV 80%) // round morphology,,
+Glacier_BM2,1,3,A2,HEL62.4,d14,BSCC,NPC,Sanger,,,WT,Sendai,72.0,F,,NMM,VTN4x,09.06.2021,FI,Trial for NI Cond I (NO XAV 80%) // round morphology,,
+Glacier_BM2,1,3,A3,lise1,p28,HipSci,iPSC,,,,WT,,,,Master Stock,E8,VTN,15.08.2021,AS,,,
+Glacier_BM2,1,3,A4,seru1,p22,HipSci,iPSC,,,,WT,Sendai,,,Master Stock,E8,VTN,13.08.2021,AS,Do not take,,
+Glacier_BM2,1,3,A5,tolg4,p12,HipSci,iPSC,,,,WT,Sendai,,,Master Stock,E8,VTN,13.08.2021,AS,,,
+Glacier_BM2,1,3,I8,CV_23.1_FreshPool_1,p2,HipSci,iPSC,,1.0,,,,,,,E8,VTN,26.11.2023,BP,,1 plate,70.0
+Glacier_BM2,1,3,I9,CV_23.1_FreshPool_5,p2,HipSci,iPSC,,1.0,,,,,,,E8,VTN,26.11.2023,BP,,1 plate,70.0
+Glacier_BM2,1,4,A1,,,,,,,,,,,,,,,,,,,
+Glacier_BM2,1,4,A2,,,,,,,,,,,,,,,,,,,
+Glacier_BM2,1,4,A3,,,,,,,,,,,,,,,,,,,
+Glacier_BM2,1,4,A4,,,,,,,,,,,,,,,,,,,
+Glacier_BM2,1,4,A5,,,,,,,,,,,,,,,,,,,
+Glacier_BM2,1,4,A6,,,,,,,,,,,,,,,,,,,
+Glacier_BM2,1,4,A7,letw1,p37,HipSci,iPSC,,,,WT,,,,,E8,VTN,24.03.2022,RL,NI2022,1/2 plate,
+Glacier_BM2,1,5,E2,HEL61.1,p13,BSCC,iPSC,,,,WT,Sendai,,F,General Stock,E8,VTN,14.06.2021,RW,,1 plate,70.0
+Glacier_BM2,1,5,E3,HEL11.4,p35,BSCC,iPSC,,,,WT,Retro,,M,General Stock,E8,VTN,17.06.2021,AS,,1 plate,90.0
+Glacier_BM2,1,5,E4,HEL11.4,p35,BSCC,iPSC,,,,WT,Retro,,M,General Stock,E8,VTN,17.06.2021,AS,,1 plate,90.0
+Glacier_BM2,1,5,E5,HEL11.4,p35,BSCC,iPSC,,,,WT,Retro,,M,General Stock,E8,VTN,17.06.2021,AS,,1 plate,90.0
+Glacier_BM2,1,5,E6,HEL61.2,p20,BSCC,iPSC,,,,WT,Sendai,,F,General Stock,E8,VTN,21.06.2021,AS,,1/2 plate,65.0
+Glacier_BM2,1,6,G5,Pool1_wo_ierp4,p6,HipSci,iPSC,,1.0,,,,,,,E8,,20.10.2022,RL,NI2022A,1 plate,90.0
+Glacier_BM2,1,6,G6,Pool1_wo_ierp4,p6,HipSci,iPSC,,1.0,,,,,,,E8,,20.10.2022,RL,NI2022A,1 plate,90.0
+Glacier_BM2,1,6,G7,Pool2_w_erp4,p6,HipSci,iPSC,,1.0,,,,,,,E8,,20.10.2022,RL,NI2022A,1 plate,90.0
+Glacier_BM2,1,6,G8,Pool2_w_ierp4,p6,HipSci,iPSC,,1.0,,,,,,,E8,,20.10.2022,RL,NI2022A,1 plate,90.0
+Glacier_BM2,1,11,A8,,,,,,,,,,,,,,,,,,,
+Glacier_BM2,1,11,A9,,,,,,,,,,,,,,,,,,,
+Glacier_BM2,1,11,B1,HEL312.3,p13,BSCC,iPSC,,,,ASH1L,Sendai,,M,,E8,VTN,07.08.2023,AS,Characterized,,60.0
+Glacier_BM2,1,11,B2,HEL313.5,p10,BSCC,iPSC,,,,ASH1L,Sendai,,M,,E8,VTN,14.07.2023,AS,38C,,70.0

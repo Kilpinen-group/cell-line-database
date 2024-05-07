@@ -1,0 +1,8 @@
+Following changes to data file were made to make it consistent.
+
+Sheet: Tank 4 BMI 2nd Floor
+1. Empty row # 54 removed.
+
+Sheet: Glacier BM2 P-Floor
+1. Empty Row # 166 added
+2. missing Text 'G5' added to 'Location Ln2 FIMM Glacier Rack I Box 9'
