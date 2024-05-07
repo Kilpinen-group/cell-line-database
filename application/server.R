@@ -1,16 +1,7 @@
+# server.R
+
 # This file is responsible for defining the server logic of the Shiny app.
 # It contains functions that handle the behavior and interactions of the app's features.
-
-# Function to initialize the data used by the app
-initializeData <- function(data_path) {
-  data <- read.csv(data_path)
-  
-  unique_values <- lapply(data, unique)
-  
-  bar_chart_values <- c("Origin", "Type")
-  
-  reactiveValues(df = data, unique = unique_values, bar_chart = bar_chart_values)
-}
 
 # Function to define the server logic for viewing data feature
 viewDataFeature <- function(input, output, session, values) {
