@@ -21,7 +21,6 @@ exploreTanksPage <- function(input, output, session, values) {
     selectInput("select_column", "Select Column:", choices = c("Line", "Passage", "Origin", "Type"))
   })
   
-  
   filtered_data <- reactive({
     req(input$select_tank)
     if (input$select_tank == "All") {
@@ -29,6 +28,13 @@ exploreTanksPage <- function(input, output, session, values) {
     } else {
       filtered_data <- values$df[values$df$Tank == input$select_tank, ]
     }
+    
+    # If there are more than 35 unique lines, filter to show only the top 35 lines
+    if (length(unique(filtered_data$Line)) > 35) {
+      top_lines <- names(sort(table(filtered_data$Line), decreasing = TRUE)[1:35])
+      filtered_data <- filtered_data[filtered_data$Line %in% top_lines, ]
+    }
+    
     filtered_data
   })
   
@@ -50,7 +56,8 @@ exploreTanksPage <- function(input, output, session, values) {
       ggplot(data, aes_string(x = column)) +
         geom_bar() +
         labs(title = paste("Bar Chart of", column)) +
-        theme(axis.text.x = element_text(angle = 45, hjust = 1))
+        theme(axis.text.x = element_text(angle = 55, hjust = 1, size = 12)) +
+        theme(axis.title = element_text(size = 14))
     }
   })
 }
@@ -350,7 +357,7 @@ downloadDataFeature <- function(input, output, session, values) {
 # Main server function incorporating all the feature-specific server logic
 server <- function(input, output, session) {
 
-  values <- initializeData("data/real_data.csv")
+  values <- initializeData("data/dummy_data.csv")
   
   selected_values <- reactiveValues()
   
