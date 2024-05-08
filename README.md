@@ -17,6 +17,7 @@ Database management system for cell lines. The app is built using Shiny App and 
 -   [ ] Properly connect MySQL with the front end
 -   [ ] Online deployment 
 -   [ ] User authentication (with [shinyauthr](https://rdrr.io/github/PaulC91/shinyauthr/)?)
+-   [ ] Proper testing and validation for the components of the app
 -   [x] There might be a problem with the data/server not loading properly in the new version of the app that divides server, ui etc. to their own files
 
 ## How to run the app locally
@@ -42,7 +43,24 @@ Currently, this implementation is not completed. Please refer to database folder
 
 ## Front end
 
-The front end uses [Shiny App for R](https://shiny.posit.co/r/getstarted/shiny-basics/lesson1/index.html). The file app.R is used for running the application and loading packages. The server and ui functonalities have been extracted to their own files to make everything more clear. The global.R file is used to load functionality before any other file is run. The package responsible for the look of the application is [shinydashboard](https://rstudio.github.io/shinydashboard/index.html). Please read the tutorial linked in the previous sentence to better understand how it works. To better understand databases with Shiny App (it is for SQLite, but still informative) refer to the [following tutorial](https://shanghai.hosting.nyu.edu/data/r/case-4-database-management-shiny.html). The package [shinyauthr](https://rdrr.io/github/PaulC91/shinyauthr/), which was also talked about in the previously linked tutorial, is useful for creating user authentications. 
+The front end uses [Shiny App for R](https://shiny.posit.co/r/getstarted/shiny-basics/lesson1/index.html). The server and ui functonalities have been extracted to their own files to make everything more clear. The specific structure of the app is the following:
+1. app.R
+   - Sources the logic from ui and server files, then creates and runs the Shiny application.
+2. global.R
+   - Loads necessary components when the app is launched. Ensures the other files have access to imports.
+3. ui.R
+   - Defines the interface that the app uses.
+   - Main function in the bottom.
+     - Defines parts of the shinydashboard
+     - Components of the dashboardBody are divided into functions based on tabs.
+4. server.UI
+   - The logic is divided to functions based on the features.
+   - Main function in the bottom.
+     - The csv file containing data used in the app is given.
+     - Reactive components used throughout the app are defined.
+     - Compiles the other functions.
+
+The package responsible for the look of the application is [shinydashboard](https://rstudio.github.io/shinydashboard/index.html). Please read the tutorial linked in the previous sentence to better understand how it works. To better understand databases with Shiny App (it is for SQLite, but still informative) refer to the [following tutorial](https://shanghai.hosting.nyu.edu/data/r/case-4-database-management-shiny.html). The package [shinyauthr](https://rdrr.io/github/PaulC91/shinyauthr/), which was also talked about in the previously linked tutorial, is useful for creating user authentications. 
 
 ## Preprocessing
 
